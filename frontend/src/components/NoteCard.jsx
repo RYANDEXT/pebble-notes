@@ -2,16 +2,19 @@ import { Link } from 'react-router';
 import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import { formatDate } from '../lib/utils';
 import ModalNote from './ModalNote';
-import api from '../lib/axios';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { deleteNote } from '../redux/slices/notesSlice';
 
 const NoteCard = ({ note }) => {
+    const dispatch = useDispatch();
+
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this note?'))
             return;
 
         try {
-            await api.delete(`/notes/${id}`);
+            await dispatch(deleteNote(id));
             toast.success('Note deleted successfully');
         } catch (error) {
             console.log('error deleting note', error);
